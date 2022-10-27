@@ -1,7 +1,7 @@
 /*
  * @Author: plucky
  * @Date: 2022-10-15 00:32:59
- * @LastEditTime: 2022-10-27 16:57:48
+ * @LastEditTime: 2022-10-27 19:22:41
  * @Description: 
  */
 
@@ -101,13 +101,13 @@ fn Forms(cx: Scope)->Element{
         });
        
     };
-
+    
     cx.render(rsx!{
         div {
-            class: "mt-6 max-w-2xl w-11/12  mx-auto",// 上边距6，最大宽度2xl，宽度11/12，水平居中
+            class: "mt-6 max-w-2xl w-11/12  mx-auto ",// 上边距6，最大宽度2xl，宽度11/12，水平居中
             
             div {
-                class: " p-4 bg-white rounded-md shadow-md",
+                class: "p-4 bg-white rounded-md shadow-md",
                 h4 {
                     class: "text-gray-600",
                     "Params"
@@ -192,7 +192,7 @@ fn Forms(cx: Scope)->Element{
                     "Public key"
                 }
                 textarea {
-                    class: "text-sm w-full h-52 md:h-36 border-1 border-gray-200 rounded-md",
+                    class: "text-sm w-full h-52 md:h-36 border border-gray-200 rounded-md",
                     value: "{public_key}",
                     oninput: move |e| {
                         public_key.set(e.value.clone());
@@ -221,7 +221,7 @@ fn Forms(cx: Scope)->Element{
                     "Result"
                 }
                 textarea {
-                    class: "text-sm w-full h-52 md:h-44 border-1 border-gray-200 rounded-md",
+                    class: "text-sm w-full h-52 md:h-44 border border-gray-200 rounded-md",
                     readonly: "true",
                     rows: "5",
                     // cols: "100",

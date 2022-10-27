@@ -1,3 +1,5 @@
 /target
 /logs
 /dist1
+/.stage
+/node_modules

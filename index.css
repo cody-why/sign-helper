@@ -21,11 +21,11 @@
 }
 
 .form-input {
-  @apply w-full mt-1 h-8 border-gray-200 rounded-md focus:border-indigo-600 focus:ring focus:ring-opacity-40 focus:ring-indigo-500;
+  @apply w-full mt-1 h-8 border-gray-200 rounded-md border;
 }
 .form-button {
-  @apply w-28 px-4 py-2 text-gray-200 bg-gray-800 rounded-md hover:bg-gray-700 focus:outline-none focus:bg-gray-700;
+  @apply w-28 px-4 py-2 text-gray-200 bg-gray-800 rounded-md hover:bg-gray-600 focus:outline-none;
 }
 .test{
-  @apply md:h-44 ; 
+  @apply mt-0 ; 
 }

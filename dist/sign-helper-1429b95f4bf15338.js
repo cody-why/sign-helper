@@ -1094,7 +1094,7 @@ function initSync(module) {
 
 async function init(input) {
     if (typeof input === 'undefined') {
-        input = new URL('sign-helper-7dbf24b20b27c8f7_bg.wasm', import.meta.url);
+        input = new URL('sign-helper-1429b95f4bf15338_bg.wasm', import.meta.url);
     }
     const imports = getImports();
 
