@@ -11,17 +11,22 @@ console_error_panic_hook = "0.1"
 # dioxus-html-macro = "0.2"
 tracing = "0"
 tracing-wasm = "0"
+
 md5 = "0.7"
-#wasm rsa need getrandom features 'js' and  rand 'getrandom'
+
+# wasm rsa need getrandom features 'js' and  rand 'getrandom'
 rsa = {version = "0.9",default-features =false ,features = ["pem"]}
-rand={version = "0.8",default-features =false ,features = ["getrandom"]}
+rand = {version = "0.8",default-features =false ,features = ["getrandom"]}
 getrandom = { version = "0.2", features = ["js"] }
 base64 = "0.13"
+
 # serde = "1"
 # serde_json = "1"
 
+
 [dev-dependencies]
-openssl={version = "0.10"}
+# openssl 在wasm环境下无法使用
+openssl = {version = "0.10"}
 
 [profile.release]
 opt-level = 3

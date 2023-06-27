@@ -1,7 +1,7 @@
 /*
  * @Author: plucky
  * @Date: 2022-10-27 08:43:53
- * @LastEditTime: 2023-06-27 09:43:28
+ * @LastEditTime: 2023-06-27 10:45:00
  * @Description:
  */
 #![allow(dead_code)]
@@ -48,11 +48,14 @@ mod tests1 {
         let md5 = md5::compute(params.as_bytes());
         let md5 = format!("{:X}", md5);
         println!("md5: {}", md5);
-        // let public_key = include_str!("../public_key.pem");
+        
+        // 纯文本公钥转pem格式
         let public_key = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCj3V68uVdsB5GhhrMQRAanapY9PtGwKsdFPXrNjG/27zp7obYbe0paN4Urs83w5HM4mo3uPLRCJpiTwxkqdwmQ4Mp5DNdb9k2gmnHJG2EcM4/annEdVyg4b3MeKxzCNRUGNWH4Ybic5AA5rjYC/BI0GHUWjbq9+odMKRUyddsvFwIDAQAB";
         // 格式pem,间隔64个字符换行
         let public_key = public_key.as_bytes().chunks(64).map(|c| std::str::from_utf8(c).unwrap()).collect::<Vec<&str>>().join("\n");
         let public_key = format!("-----BEGIN PUBLIC KEY-----\n{}\n-----END PUBLIC KEY-----", public_key);
+        // let public_key = include_str!("../public_key.pem");
+
         // rsa pkcs8
         let public_key = RsaPublicKey::from_public_key_pem(&public_key).unwrap();
         
@@ -76,17 +79,20 @@ mod tests1 {
         let md5 = md5::compute(params.as_bytes());
         let md5 = format!("{:X}", md5);
         println!("md5: {}", md5);
-        // let public_key = include_str!("../public_key.pem");
+
+        // 纯文本公钥转pem格式
         let public_key = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCj3V68uVdsB5GhhrMQRAanapY9PtGwKsdFPXrNjG/27zp7obYbe0paN4Urs83w5HM4mo3uPLRCJpiTwxkqdwmQ4Mp5DNdb9k2gmnHJG2EcM4/annEdVyg4b3MeKxzCNRUGNWH4Ybic5AA5rjYC/BI0GHUWjbq9+odMKRUyddsvFwIDAQAB";
         // 格式pem,间隔64个字符换行
         let public_key = public_key.as_bytes().chunks(64).map(|c| std::str::from_utf8(c).unwrap()).collect::<Vec<&str>>().join("\n");
         let public_key = format!("-----BEGIN PUBLIC KEY-----\n{}\n-----END PUBLIC KEY-----", public_key);
+        // let public_key = include_str!("../public_key.pem");
         
+        // rsa pkcs8
         let rsa = Rsa::public_key_from_pem(public_key.as_bytes()).unwrap();
         let mut rsa_u8 = vec![0; rsa.size() as usize];
         let len = rsa.public_encrypt(md5.as_bytes(), &mut rsa_u8, Padding::PKCS1).unwrap();
         rsa_u8.truncate(len);
-        let sign = base64::encode(rsa_u8);
+        let sign = openssl::base64::encode_block(&rsa_u8);
 
         println!("sign: {}", sign);
         

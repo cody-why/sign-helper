@@ -1,11 +1,11 @@
 /*
  * @Author: anger
  * @Date: 2023-06-27 07:32:04
- * @LastEditTime: 2023-06-27 09:44:10
+ * @LastEditTime: 2023-06-27 10:06:31
  * @Description: 
  */
 
-use rsa::{RsaPublicKey, pkcs8::DecodePublicKey, Pkcs1v15Encrypt};
+
 pub struct Params{
     pub data: Vec<(String,String)>,
 }
@@ -41,6 +41,7 @@ impl Params {
     
     /// 生成签名
     pub fn generate_sign(&self, public_key: &str) -> String {
+        use rsa::{RsaPublicKey, pkcs8::DecodePublicKey, Pkcs1v15Encrypt};
         // 过滤空值
         let mut data = self.data.iter().filter(|(k,v)|{!k.is_empty() && !v.is_empty()}).collect::<Vec<_>>();
         // 排序
