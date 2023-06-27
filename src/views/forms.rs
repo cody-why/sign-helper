@@ -1,81 +1,17 @@
 /*
  * @Author: plucky
  * @Date: 2022-10-15 00:32:59
- * @LastEditTime: 2022-10-27 19:22:41
+ * @LastEditTime: 2023-06-27 08:05:23
  * @Description: 
  */
 
 #![allow(non_snake_case)]
 
 use dioxus::{prelude::*};
+
+use crate::model::Params;
 // use tracing::info;
-use rsa::{PublicKey, RsaPublicKey, PaddingScheme, pkcs8:: DecodePublicKey};
-struct Params{
-    pub data: Vec<(String,String)>,
-}
 
-impl Params {
-    pub fn new() -> Self {
-        Self {
-            data: vec![
-                ("appId".to_string(),"".to_string()),
-                ("gameId".to_string(),"".to_string()),
-                ("at".to_string(),"".to_string()),
-            ]
-        }
-    }
-
-    pub fn add_params(&mut self, key: String, value: String) {
-        self.data.push((key,value));
-    }
-
-    pub fn remove_params(&mut self, id: usize) {
-        self.data.remove(id);
-    }
-
-    pub fn update_params(&mut self, id: usize, key: String, value: String) {
-        self.data[id] = (key,value);
-    }
-    pub fn generate_sign(&self, public_key:&str) -> String {
-        // 过滤空值
-        let mut data = self.data.iter().filter(|(k,v)|{!k.is_empty() && !v.is_empty()}).collect::<Vec<_>>();
-        // 排序
-        data.sort_by(|a,b|{
-            a.0.cmp(&b.0)
-        });
-        // 拼接
-        let str = data.iter()
-        .map(|(k,v)| format!("{}={}",k.trim(),v.trim()))
-        .collect::<Vec<String>>().join("&");
-        let md5 = md5::compute(str.as_bytes());
-        let md5 = format!("{:X}", md5);
-
-        // rsa pkcs8
-        let public_key = RsaPublicKey::from_public_key_pem(public_key).unwrap();
-        
-        let mut rng = rand::rngs::OsRng;
-        let rsau8 = public_key.encrypt(&mut rng, PaddingScheme::new_pkcs1v15_encrypt(), md5.as_bytes()).unwrap();
-        let sign = base64::encode(rsau8);
-        // let json =  self.generate_json(&data, &sign);
-
-        format!("params: {}\nmd5: {:}\nsign: {}\n",str, md5,sign)
-    }
-
-    #[allow(dead_code)]
-    pub fn generate_json(&self,data: &Vec<&(String, String)>, sign: &str) -> String {
-        let mut json = String::with_capacity(1024);
-        json.push_str("{");
-        for (k,v) in data {
-            json.push_str(&format!("\"{}\":\"{}\",",k,v));
-        }
-        json.push_str(&format!("\"sign\":\"{}\"",sign));
-        json.push_str("}");
-        json
-       
-    }
-
-
-}
 
 pub fn view(cx: Scope)->Element{
     
@@ -91,13 +27,13 @@ pub fn view(cx: Scope)->Element{
 
 
 fn Forms(cx: Scope)->Element{
-    let params = use_ref(&cx, || Params::new());
-    let result = use_state(&cx, ||String::new());
+    let params = use_ref(&cx, Params::new);
+    let result = use_state(&cx, String::new);
     let public_key = use_state(&cx, ||include_str!("../../public_key.pem").to_string());
 
     let check_params = move || {
         params.with(|p| {
-            result.set(p.generate_sign(&public_key));
+            result.set(p.generate_sign(public_key));
         });
        
     };

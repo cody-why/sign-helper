@@ -6,6 +6,7 @@
  */
 mod views;
 mod tests;
+pub mod model;
 use dioxus::prelude::*;
 use views::*;
 
